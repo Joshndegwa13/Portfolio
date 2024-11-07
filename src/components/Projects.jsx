@@ -7,7 +7,7 @@ const ProjectCard = ({ title, description, projectId }) => {
   const [images, setImages] = useState([]);
 
   useEffect(() => {
-    // Generate array of image paths for this project
+    // Use projectId to construct the folder path (project1, project2, etc.)
     const projectImages = Array.from({ length: 5 }, (_, i) => `/projects/project${projectId}/${i + 1}.jpg`);
     setImages(projectImages);
   }, [projectId]);
@@ -35,7 +35,7 @@ const ProjectCard = ({ title, description, projectId }) => {
       transition={{ duration: 0.5 }}
       className="bg-slate-800 rounded-lg overflow-hidden shadow-lg hover:shadow-primary/20"
     >
-      <div className="relative h-64">
+      <div className="relative pt-[56.25%]">
         <motion.img
           key={currentImage}
           initial={{ opacity: 0 }}
@@ -43,42 +43,45 @@ const ProjectCard = ({ title, description, projectId }) => {
           transition={{ duration: 0.5 }}
           src={images[currentImage]}
           alt={`${title} screenshot ${currentImage + 1}`}
-          className="w-full h-full object-cover"
+          className="absolute top-0 left-0 w-full h-full object-contain bg-slate-900"
           onError={(e) => {
-            e.target.src = 'https://via.placeholder.com/800x600';
+            e.target.src = 'https://via.placeholder.com/1920x1080';
           }}
         />
         
-        {/* Image counter */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 px-2 py-1 rounded-full text-sm">
-          {currentImage + 1} / {images.length}
+        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-between">
+          <button
+            onClick={prevImage}
+            className="ml-4 bg-black/50 p-3 rounded-full hover:bg-black/75 transition-colors backdrop-blur-sm group"
+          >
+            <FaChevronLeft className="text-xl group-hover:scale-125 transition-transform" />
+          </button>
+          <button
+            onClick={nextImage}
+            className="mr-4 bg-black/50 p-3 rounded-full hover:bg-black/75 transition-colors backdrop-blur-sm group"
+          >
+            <FaChevronRight className="text-xl group-hover:scale-125 transition-transform" />
+          </button>
         </div>
 
-        {/* Navigation arrows */}
-        <button
-          onClick={prevImage}
-          className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 p-2 rounded-full hover:bg-black/75 transition-colors"
-        >
-          <FaChevronLeft />
-        </button>
-        <button
-          onClick={nextImage}
-          className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 p-2 rounded-full hover:bg-black/75 transition-colors"
-        >
-          <FaChevronRight />
-        </button>
-
-        {/* Navigation dots */}
-        <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
-          {images.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentImage(index)}
-              className={`w-2 h-2 rounded-full transition-colors ${
-                currentImage === index ? 'bg-primary' : 'bg-white/50'
-              }`}
-            />
-          ))}
+        <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-slate-900/90 via-slate-900/60 to-transparent">
+          <div className="flex justify-center gap-2 mb-2">
+            {images.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentImage(index)}
+                className={`w-2.5 h-2.5 rounded-full transition-all ${
+                  currentImage === index 
+                    ? 'bg-primary scale-110' 
+                    : 'bg-white/50 hover:bg-white/75'
+                }`}
+              />
+            ))}
+          </div>
+          
+          <div className="text-center text-sm text-white/90">
+            {currentImage + 1} / {images.length}
+          </div>
         </div>
       </div>
 
@@ -94,23 +97,23 @@ const Projects = () => {
   const projects = [
     {
       id: 1,
-      title: "Project One",
-      description: "Description of project one. Replace this text with your project details. Explain the technologies used, challenges overcome, and the value it provides.",
+      title: "PetPal: Your Ultimate Pet Care Companion",
+      description: "PetPal makes pet ownership easy by organizing vet visits, feeding schedules, and grooming reminders in one app. Track essential details and capture memories with a gallery to document your pet’s journey. For happy, healthy pets, PetPal is your go-to solution",
     },
     {
       id: 2,
-      title: "Project Two",
-      description: "Description of project two. Replace this text with your project details. Explain the technologies used, challenges overcome, and the value it provides.",
+      title: "Inventa: Simple Inventory Management",
+      description: "Inventa is the ideal tool for small businesses to track inventory, manage stock levels, and streamline sales with real-time insights and low-stock alerts. Boost efficiency and stay organized with ease.",
     },
     {
       id: 3,
-      title: "Project Three",
-      description: "Description of project three. Replace this text with your project details. Explain the technologies used, challenges overcome, and the value it provides.",
+      title: "Wellness Balance: Personalized Workout Planner",
+      description: "Wellness Balance creates customized workouts tailored to your fitness level and goals, whether you're aiming to build muscle or improve endurance. Track and document your daily workouts easily within the app, keeping you motivated and on top of your fitness journey.",
     },
     {
       id: 4,
-      title: "Project Four",
-      description: "Description of project four. Replace this text with your project details. Explain the technologies used, challenges overcome, and the value it provides.",
+      title: "Wellness Balance: My Frontend Journey Begins",
+      description: "Wellness Balance is my first project, built with HTML, JavaScript, and Tailwind CSS. It sparked my passion for frontend development, blending simplicity with functionality to help users get tailored workouts, keeping you highly motivated in your fitness journey",
     },
   ];
 
@@ -131,9 +134,10 @@ const Projects = () => {
         <div className="grid md:grid-cols-2 gap-8 mt-10">
           {projects.map((project) => (
             <ProjectCard 
-              key={project.id} 
-              {...project} 
+              key={project.id}
               projectId={project.id}
+              title={project.title}
+              description={project.description}
             />
           ))}
         </div>
