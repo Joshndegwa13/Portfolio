@@ -64,7 +64,7 @@ const Contact = () => {
             <div>
               <h3 className="text-xl font-bold">LinkedIn</h3>
               <a 
-                href="#" // Add your LinkedIn profile URL here
+                href="https://www.linkedin.com/in/joshua-ndegwa"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-300 hover:text-primary transition-colors"
@@ -84,7 +84,7 @@ const Contact = () => {
             <div>
               <h3 className="text-xl font-bold">GitHub</h3>
               <a 
-                href="#" // Add your GitHub profile URL here
+                href="https://github.com/Joshndegwa13"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-300 hover:text-primary transition-colors"

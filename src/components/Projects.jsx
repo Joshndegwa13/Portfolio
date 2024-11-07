@@ -1,75 +1,139 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const ProjectCard = ({ title, description, projectId }) => {
   const [currentImage, setCurrentImage] = useState(0);
   const [images, setImages] = useState([]);
+  const [autoplay, setAutoplay] = useState(false);
+  const [direction, setDirection] = useState(0);
+  const cardRef = useRef(null);
+  const isInView = useInView(cardRef, { once: false, amount: 0.3 });
 
   useEffect(() => {
-    // Use projectId to construct the folder path (project1, project2, etc.)
+    // Generate array of image paths for this project
     const projectImages = Array.from({ length: 5 }, (_, i) => `/projects/project${projectId}/${i + 1}.jpg`);
     setImages(projectImages);
   }, [projectId]);
 
   useEffect(() => {
+    if (!isInView) {
+      setCurrentImage(0);
+      setAutoplay(false);
+      return;
+    }
+
+    setAutoplay(true);
     const timer = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % images.length);
-    }, 5000);
+      if (autoplay) {
+        setDirection(1);
+        setCurrentImage((prev) => (prev + 1) % images.length);
+      }
+    }, 3000);
 
     return () => clearInterval(timer);
-  }, [images.length]);
+  }, [isInView, images.length, autoplay]);
 
-  const nextImage = () => {
-    setCurrentImage((prev) => (prev + 1) % images.length);
+  const slideVariants = {
+    enter: (direction) => ({
+      x: direction > 0 ? 1000 : -1000,
+      opacity: 0
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1
+    },
+    exit: (direction) => ({
+      zIndex: 0,
+      x: direction < 0 ? 1000 : -1000,
+      opacity: 0
+    })
   };
 
-  const prevImage = () => {
-    setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
+  const swipeConfidenceThreshold = 10000;
+  const swipePower = (offset, velocity) => {
+    return Math.abs(offset) * velocity;
+  };
+
+  const paginate = (newDirection) => {
+    setDirection(newDirection);
+    setAutoplay(false);
+    setCurrentImage((prev) => (prev + newDirection + images.length) % images.length);
   };
 
   return (
     <motion.div
+      ref={cardRef}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       className="bg-slate-800 rounded-lg overflow-hidden shadow-lg hover:shadow-primary/20"
     >
-      <div className="relative pt-[56.25%]">
-        <motion.img
-          key={currentImage}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          src={images[currentImage]}
-          alt={`${title} screenshot ${currentImage + 1}`}
-          className="absolute top-0 left-0 w-full h-full object-contain bg-slate-900"
-          onError={(e) => {
-            e.target.src = 'https://via.placeholder.com/1920x1080';
-          }}
-        />
+      <div className="relative h-[400px] bg-slate-900">
+        <AnimatePresence initial={false} custom={direction}>
+          <motion.img
+            key={currentImage}
+            src={images[currentImage]}
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.2 }
+            }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={1}
+            onDragEnd={(e, { offset, velocity }) => {
+              const swipe = swipePower(offset.x, velocity.x);
+
+              if (swipe < -swipeConfidenceThreshold) {
+                paginate(1);
+              } else if (swipe > swipeConfidenceThreshold) {
+                paginate(-1);
+              }
+            }}
+            className="absolute top-0 left-0 w-full h-full object-contain"
+            alt={`${title} screenshot ${currentImage + 1}`}
+            onError={(e) => {
+              e.target.src = 'https://via.placeholder.com/1920x1080?text=Project+Screenshot';
+            }}
+          />
+        </AnimatePresence>
         
-        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-between">
+        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-between opacity-0 hover:opacity-100 transition-opacity duration-200">
           <button
-            onClick={prevImage}
-            className="ml-4 bg-black/50 p-3 rounded-full hover:bg-black/75 transition-colors backdrop-blur-sm group"
+            onClick={() => paginate(-1)}
+            className="ml-4 bg-black/50 p-3 rounded-full hover:bg-black/75 transition-all backdrop-blur-sm group"
+            onMouseEnter={() => setAutoplay(false)}
           >
             <FaChevronLeft className="text-xl group-hover:scale-125 transition-transform" />
           </button>
           <button
-            onClick={nextImage}
-            className="mr-4 bg-black/50 p-3 rounded-full hover:bg-black/75 transition-colors backdrop-blur-sm group"
+            onClick={() => paginate(1)}
+            className="mr-4 bg-black/50 p-3 rounded-full hover:bg-black/75 transition-all backdrop-blur-sm group"
+            onMouseEnter={() => setAutoplay(false)}
           >
             <FaChevronRight className="text-xl group-hover:scale-125 transition-transform" />
           </button>
         </div>
 
-        <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-slate-900/90 via-slate-900/60 to-transparent">
+        <div 
+          className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-slate-900/90 via-slate-900/60 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-200"
+          onMouseEnter={() => setAutoplay(false)}
+        >
           <div className="flex justify-center gap-2 mb-2">
             {images.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setCurrentImage(index)}
+                onClick={() => {
+                  setDirection(index > currentImage ? 1 : -1);
+                  setAutoplay(false);
+                  setCurrentImage(index);
+                }}
                 className={`w-2.5 h-2.5 rounded-full transition-all ${
                   currentImage === index 
                     ? 'bg-primary scale-110' 
@@ -98,7 +162,7 @@ const Projects = () => {
     {
       id: 1,
       title: "PetPal: Your Ultimate Pet Care Companion",
-      description: "PetPal makes pet ownership easy by organizing vet visits, feeding schedules, and grooming reminders in one app. Track essential details and capture memories with a gallery to document your pet’s journey. For happy, healthy pets, PetPal is your go-to solution",
+      description: "PetPal makes pet ownership easy by organizing vet visits, feeding schedules, and grooming reminders in one app. Track essential details and capture memories with a gallery to document your pet's journey. For happy, healthy pets, PetPal is your go-to solution",
     },
     {
       id: 2,
