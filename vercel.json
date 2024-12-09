@@ -1,19 +1,31 @@
 {
-  "framework": "vite",
-  "buildCommand": "vite build",
-  "outputDirectory": "dist",
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": { "zeroConfig": true }
+    }
+  ],
   "routes": [
     {
-      "src": "/(.*)\\.jsx?$",
+      "src": "/projects/(.*)",
       "headers": {
-        "content-type": "application/javascript"
-      }
+        "cache-control": "public, max-age=31536000, immutable",
+        "Access-Control-Allow-Origin": "*"
+      },
+      "continue": true
     },
     {
-      "src": "/assets/(.*)",
+      "src": "/(.*)",
       "headers": {
-        "cache-control": "public, max-age=31536000, immutable"
-      }
+        "cache-control": "public, max-age=31536000, immutable",
+        "Access-Control-Allow-Origin": "*",
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "DENY",
+        "X-XSS-Protection": "1; mode=block"
+      },
+      "continue": true
     },
     {
       "handle": "filesystem"
@@ -23,29 +35,13 @@
       "dest": "/index.html"
     }
   ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        },
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    }
-  ],
-  "cleanUrls": true,
-  "trailingSlash": false
+  "images": {
+    "sizes": [640, 750, 828, 1080, 1200],
+    "minimumCacheTTL": 60,
+    "domains": ["images.unsplash.com"],
+    "formats": ["image/webp", "image/avif"]
+  },
+  "github": {
+    "silent": true
+  }
 }
