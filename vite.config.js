@@ -8,29 +8,33 @@ export default defineConfig({
     minify: 'esbuild',
     cssMinify: true,
     cssCodeSplit: true,
-    modulePreload: true,
+    modulePreload: {
+      polyfill: true
+    },
     reportCompressedSize: false,
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
-          'animation-vendor': ['framer-motion', '@react-spring/web'],
+          'animation-vendor': ['framer-motion', '@react-spring/web', 'popmotion'],
           'ui-vendor': ['react-tilt', 'react-fast-marquee'],
           'icons': ['react-icons'],
-          'utils': ['react-intersection-observer', 'react-use', 'popmotion']
+          'components': ['./src/components/']
         }
       }
     }
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'framer-motion', '@react-spring/web'],
-    exclude: ['blurhash']
-  },
-  server: {
-    hmr: {
-      protocol: 'ws'
-    }
+    include: [
+      'react',
+      'react-dom',
+      'framer-motion',
+      '@react-spring/web',
+      'popmotion',
+      'react-tilt',
+      'react-fast-marquee'
+    ]
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx']
