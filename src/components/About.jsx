@@ -5,6 +5,7 @@ const About = () => {
   return (
     <div id="about" className="w-full min-h-screen pt-20">
       <div className="max-w-screen-xl mx-auto px-4 flex flex-col justify-center w-full h-full">
+        {/* Section header with animation */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -16,6 +17,7 @@ const About = () => {
           </p>
         </motion.div>
 
+        {/* First paragraph with slide-up animation */}
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -25,6 +27,7 @@ const About = () => {
           Hi, I'm Joshua Ndegwa! I'm a web developer with a deep love for crafting engaging and visually striking front-end experiences. My passion lies in building intuitive, user-centered interfaces that combine creativity with clean, efficient code. From transforming complex concepts into sleek, interactive web applications to enhancing performance and responsiveness, I enjoy every detail of the front-end journey.
         </motion.p>
 
+        {/* Second paragraph with delayed animation */}
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

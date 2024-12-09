@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-scroll';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiMenuAlt3, HiX } from 'react-icons/hi';
+import { useTheme } from '../context/ThemeContext';
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { isDark } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,22 +28,81 @@ const Navbar = () => {
     { id: 5, link: 'contact' },
   ];
 
+  const springConfig = {
+    type: "spring",
+    stiffness: 300,
+    damping: 30
+  };
+
+  const menuVariants = {
+    open: {
+      opacity: 1,
+      height: 'auto',
+      transition: {
+        type: 'spring',
+        stiffness: 200,
+        damping: 20,
+        staggerChildren: 0.1,
+      },
+    },
+    closed: {
+      opacity: 0,
+      height: 0,
+      transition: {
+        type: 'spring',
+        stiffness: 300,
+        damping: 25,
+        staggerChildren: 0.05,
+        staggerDirection: -1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    open: {
+      opacity: 1,
+      y: 0,
+      transition: springConfig
+    },
+    closed: {
+      opacity: 0,
+      y: 20,
+      transition: springConfig
+    },
+  };
+
   return (
     <motion.nav 
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed w-full h-20 z-50 transition-transform duration-200 gpu-accelerated ${
-        scrolled ? 'bg-slate-900/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
+      transition={springConfig}
+      className={`fixed w-full h-20 z-50 transition-all duration-700 ${
+        scrolled 
+          ? `${isDark ? 'bg-slate-900/95' : 'bg-white/95'} backdrop-blur-md shadow-lg` 
+          : 'bg-transparent'
       }`}
     >
       <div className="flex justify-between items-center max-w-screen-xl mx-auto px-4 h-full">
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
+          transition={{ duration: 0.7 }}
           className="text-2xl font-bold"
         >
-          <span className="text-primary hover:text-primary-light transition-colors">Joshua</span>
-          <span className="text-primary hover:text-primary-light transition-colors ml-2">Ndegwa</span>
+          <motion.span 
+            className="text-primary hover:text-primary-light transition-colors duration-500"
+            whileHover={{ scale: 1.05 }}
+            transition={springConfig}
+          >
+            Joshua
+          </motion.span>
+          <motion.span 
+            className="text-primary hover:text-primary-light transition-colors duration-500 ml-2"
+            whileHover={{ scale: 1.05 }}
+            transition={springConfig}
+          >
+            Ndegwa
+          </motion.span>
         </motion.div>
 
         <div className="hidden md:flex space-x-2">
@@ -52,48 +113,60 @@ const Navbar = () => {
               spy={true}
               smooth={true}
               offset={-80}
-              duration={300}
-              className="px-4 py-2 cursor-pointer capitalize font-medium hover:text-primary rounded-md transition-colors gpu-accelerated"
+              duration={700}
+              className="px-4 py-2 cursor-pointer capitalize font-medium hover:text-primary rounded-md transition-colors duration-500"
               activeClass="text-primary"
             >
-              {link}
+              <motion.span
+                whileHover={{ scale: 1.1 }}
+                transition={springConfig}
+              >
+                {link}
+              </motion.span>
             </Link>
           ))}
         </div>
 
-        <div className="md:hidden cursor-pointer" onClick={() => setNav(!nav)}>
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            className="gpu-accelerated"
-          >
-            {nav ? <HiX size={30} /> : <HiMenuAlt3 size={30} />}
-          </motion.div>
-        </div>
+        <motion.button
+          className="md:hidden z-50"
+          onClick={() => setNav(!nav)}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          transition={springConfig}
+        >
+          {nav ? <HiX size={30} /> : <HiMenuAlt3 size={30} />}
+        </motion.button>
       </div>
 
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {nav && (
           <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden absolute w-full bg-slate-900/95 backdrop-blur-md shadow-lg gpu-accelerated"
+            initial="closed"
+            animate="open"
+            exit="closed"
+            variants={menuVariants}
+            className={`md:hidden absolute w-full ${
+              isDark ? 'bg-slate-900/95' : 'bg-white/95'
+            } backdrop-blur-md shadow-lg overflow-hidden`}
           >
             {links.map(({ id, link }) => (
-              <Link
+              <motion.div
                 key={id}
-                onClick={() => setNav(false)}
-                to={link}
-                spy={true}
-                smooth={true}
-                offset={-80}
-                duration={300}
-                className="px-4 py-4 text-lg cursor-pointer capitalize block hover:text-primary hover:bg-slate-800/50 transition-all"
+                variants={itemVariants}
+                className="border-b border-gray-200 dark:border-gray-700 last:border-none"
               >
-                {link}
-              </Link>
+                <Link
+                  onClick={() => setNav(false)}
+                  to={link}
+                  spy={true}
+                  smooth={true}
+                  offset={-80}
+                  duration={700}
+                  className="px-4 py-4 text-lg cursor-pointer capitalize block hover:text-primary hover:bg-gray-100 dark:hover:bg-slate-800/50 transition-all duration-500"
+                >
+                  {link}
+                </Link>
+              </motion.div>
             ))}
           </motion.div>
         )}

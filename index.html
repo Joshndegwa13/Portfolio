@@ -4,8 +4,37 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Joshua Ndegwa's portfolio - Web Developer specializing in creating beautiful and functional web experiences" />
+    
+    <!-- Preload critical fonts -->
+    <link 
+      rel="preload" 
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800&display=swap"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    </noscript>
+
+    <!-- Preconnect to required origins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+    
+    <!-- Preload critical images -->
+    <link rel="preload" as="image" href="/projects/project1/1.jpg" />
+    
+    <!-- PWA meta tags -->
+    <meta name="theme-color" content="#0D9488" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- Performance optimization meta tags -->
+    <meta http-equiv="Cache-Control" content="max-age=31536000" />
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+    
     <title>Joshua Ndegwa | Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   </head>
   <body>
     <div id="root"></div>

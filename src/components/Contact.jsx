@@ -2,10 +2,43 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FaEnvelope, FaPhone, FaLinkedin, FaGithub } from 'react-icons/fa';
 
+// Contact info items with their respective icons and links
+const contactItems = [
+  {
+    id: 'email',
+    icon: <FaEnvelope className="text-4xl text-primary" />,
+    title: 'Email',
+    value: 'ndegwajosh7@gmail.com',
+    href: 'mailto:ndegwajosh7@gmail.com',
+  },
+  {
+    id: 'phone',
+    icon: <FaPhone className="text-4xl text-primary" />,
+    title: 'Phone',
+    value: '+254 727 435 353',
+    href: 'tel:+254727435353',
+  },
+  {
+    id: 'linkedin',
+    icon: <FaLinkedin className="text-4xl text-primary" />,
+    title: 'LinkedIn',
+    value: 'Connect on LinkedIn',
+    href: 'https://www.linkedin.com/in/joshua-ndegwa',
+  },
+  {
+    id: 'github',
+    icon: <FaGithub className="text-4xl text-primary" />,
+    title: 'GitHub',
+    value: 'View GitHub Profile',
+    href: 'https://github.com/Joshndegwa13',
+  },
+];
+
 const Contact = () => {
   return (
     <div id="contact" className="w-full min-h-screen pt-20">
       <div className="max-w-screen-xl mx-auto px-4 flex flex-col justify-center w-full h-full">
+        {/* Section header with fade-in animation */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -17,82 +50,30 @@ const Contact = () => {
           </p>
         </motion.div>
 
+        {/* Contact items grid with staggered animations */}
         <div className="flex flex-col gap-8 mt-10">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="flex items-center gap-4"
-          >
-            <FaEnvelope className="text-4xl text-primary" />
-            <div>
-              <h3 className="text-xl font-bold">Email</h3>
-              <a 
-                href="mailto:ndegwajosh7@gmail.com"
-                className="text-gray-300 hover:text-primary transition-colors"
-              >
-                ndegwajosh7@gmail.com
-              </a>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex items-center gap-4"
-          >
-            <FaPhone className="text-4xl text-primary" />
-            <div>
-              <h3 className="text-xl font-bold">Phone</h3>
-              <a 
-                href="tel:+254727435353"
-                className="text-gray-300 hover:text-primary transition-colors"
-              >
-                +254 727 435 353
-              </a>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex items-center gap-4"
-          >
-            <FaLinkedin className="text-4xl text-primary" />
-            <div>
-              <h3 className="text-xl font-bold">LinkedIn</h3>
-              <a 
-                href="https://www.linkedin.com/in/joshua-ndegwa"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-300 hover:text-primary transition-colors"
-              >
-                Connect on LinkedIn
-              </a>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-            className="flex items-center gap-4"
-          >
-            <FaGithub className="text-4xl text-primary" />
-            <div>
-              <h3 className="text-xl font-bold">GitHub</h3>
-              <a 
-                href="https://github.com/Joshndegwa13"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-300 hover:text-primary transition-colors"
-              >
-                View GitHub Profile
-              </a>
-            </div>
-          </motion.div>
+          {contactItems.map((item, index) => (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.2 }}
+              className="flex items-center gap-4"
+            >
+              {item.icon}
+              <div>
+                <h3 className="text-xl font-bold">{item.title}</h3>
+                <a 
+                  href={item.href}
+                  target={item.id === 'linkedin' || item.id === 'github' ? '_blank' : undefined}
+                  rel={item.id === 'linkedin' || item.id === 'github' ? 'noopener noreferrer' : undefined}
+                  className="text-gray-300 hover:text-primary transition-colors"
+                >
+                  {item.value}
+                </a>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </div>
