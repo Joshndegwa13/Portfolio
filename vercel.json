@@ -4,24 +4,48 @@
   "outputDirectory": "dist",
   "routes": [
     {
-      "source": "/(.*)\\.jsx?$",
+      "src": "/(.*)\\.jsx?$",
       "headers": {
-        "Content-Type": "application/javascript"
+        "content-type": "application/javascript"
       }
     },
     {
-      "source": "/(.*)",
+      "src": "/assets/(.*)",
       "headers": {
-        "X-Content-Type-Options": "nosniff",
-        "X-Frame-Options": "DENY",
-        "X-XSS-Protection": "1; mode=block",
-        "Cache-Control": "public, max-age=31536000, immutable"
+        "cache-control": "public, max-age=31536000, immutable"
       }
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/.*",
+      "dest": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
     }
   ],
   "cleanUrls": true,
-  "trailingSlash": false,
-  "github": {
-    "silent": true
-  }
+  "trailingSlash": false
 }
