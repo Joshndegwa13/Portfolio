@@ -8,53 +8,23 @@ export default defineConfig({
     minify: 'esbuild',
     cssMinify: true,
     cssCodeSplit: true,
-    modulePreload: {
-      polyfill: true
-    },
+    modulePreload: true,
     reportCompressedSize: false,
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
-        manualChunks: (id) => {
-          // Core vendor chunks
-          if (id.includes('node_modules')) {
-            if (id.includes('react/') || id.includes('react-dom/')) {
-              return 'react-core';
-            }
-            if (id.includes('framer-motion') || id.includes('@react-spring')) {
-              return 'animations';
-            }
-            if (id.includes('react-tilt') || id.includes('react-fast-marquee')) {
-              return 'ui-effects';
-            }
-            if (id.includes('react-icons')) {
-              return 'icons';
-            }
-            return 'vendor';
-          }
-          // Component chunks
-          if (id.includes('/components/')) {
-            if (id.includes('Projects')) return 'projects';
-            if (id.includes('Skills')) return 'skills';
-            if (id.includes('About')) return 'about';
-            if (id.includes('Contact')) return 'contact';
-            if (id.includes('Hero')) return 'hero';
-            return 'components';
-          }
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+          'animation-vendor': ['framer-motion', '@react-spring/web'],
+          'ui-vendor': ['react-tilt', 'react-fast-marquee'],
+          'icons': ['react-icons'],
+          'utils': ['react-intersection-observer', 'react-use', 'popmotion']
         }
       }
     }
   },
   optimizeDeps: {
-    include: [
-      'react',
-      'react-dom',
-      'framer-motion',
-      '@react-spring/web',
-      'react-tilt',
-      'react-fast-marquee',
-      'react-intersection-observer'
-    ],
+    include: ['react', 'react-dom', 'framer-motion', '@react-spring/web'],
     exclude: ['blurhash']
   },
   server: {
@@ -62,8 +32,7 @@ export default defineConfig({
       protocol: 'ws'
     }
   },
-  preview: {
-    port: 4173,
-    host: true
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx']
   }
 });
