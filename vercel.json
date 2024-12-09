@@ -1,53 +1,20 @@
-{
-  "framework": "vite",
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "installCommand": "npm install",
-  "routes": [
-    {
-      "src": "/assets/(.*)",
-      "headers": {
-        "cache-control": "public, max-age=31536000, immutable"
-      }
-    },
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/.*",
-      "dest": "/index.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        },
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)\\.(js|jsx|ts|tsx)",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/javascript; charset=utf-8"
-        }
-      ]
-    }
-  ]
-}
+{ "version": 2,
+ "builds": [ { "src": "package.json",
+ "use": "@vercel/static-build",
+ "config": { "zeroConfig": true } } ],
+ "routes": [ { "src": "/projects/(.*)", 
+ "headers": { "cache-control": "public, max-age=31536000, immutable", 
+ "Access-Control-Allow-Origin": "*" },
+ "continue": true },
+ { "src": "/(.*)", 
+ "headers": { "cache-control": "public, max-age=31536000, immutable",
+ "Access-Control-Allow-Origin": "*", 
+ "X-Content-Type-Options": "nosniff", 
+ "X-Frame-Options": "DENY", 
+ "X-XSS-Protection": "1; mode=block" }, 
+ "continue": true }, { "handle": "filesystem" }, 
+ { "src": "/.*", "dest": "/index.html" } ], 
+ "images": { "sizes": [640, 750, 828, 1080, 1200], 
+ "minimumCacheTTL": 60, "domains": ["images.unsplash.com"], 
+ "formats": ["image/webp", "image/avif"] }, 
+ "github": { "silent": true } }

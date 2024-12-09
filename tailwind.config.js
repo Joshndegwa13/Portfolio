@@ -1,34 +1,22 @@
 /** @type {import('tailwindcss').Config} */
-export default {
-  content: [
-    "./index.html",
+ export default {
+   content: 
+   ["./index.html", 
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'class',
-  theme: {
-    extend: {
-      colors: {
-        primary: {
-          DEFAULT: '#0D9488',
-          light: '#14B8A6',
-          dark: '#0F766E'
-        },
-        dark: '#1E293B',
-      },
-      fontFamily: {
-        sans: ['Raleway', 'sans-serif'],
-      },
-    },
-  },
-  plugins: [],
-  future: {
-    hoverOnlyWhenSupported: true,
-  },
-  variants: {
-    extend: {
-      opacity: ['group-hover'],
-      transform: ['group-hover'],
-      scale: ['group-hover'],
-    }
-  }
-}
+   darkMode: 'class',
+    theme: { 
+      extend: { 
+        colors: {
+           primary: { 
+            DEFAULT: '#0D9488', 
+            light: '#14B8A6', 
+            dark: '#0F766E'
+           }, 
+   dark: '#1E293B', }, 
+   fontFamily: { 
+    sans: ['Raleway', 'sans-serif'],
+   },
+   },
+   },
+    plugins: [], }
