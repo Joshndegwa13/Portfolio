@@ -3,8 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="Joshua Ndegwa's portfolio - Web Developer specializing in creating beautiful and functional web experiences" />
+    
+    <!-- DNS Prefetch -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     
     <!-- Preload critical fonts -->
     <link 
@@ -16,14 +24,9 @@
     <noscript>
       <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     </noscript>
-
-    <!-- Preconnect to required origins -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
     
     <!-- Preload critical images -->
-    <link rel="preload" as="image" href="/projects/project1/1.jpg" />
+    <link rel="preload" as="image" href="/projects/project1/1.jpg" fetchpriority="high" />
     
     <!-- PWA meta tags -->
     <meta name="theme-color" content="#0D9488" />
@@ -33,6 +36,12 @@
     <!-- Performance optimization meta tags -->
     <meta http-equiv="Cache-Control" content="max-age=31536000" />
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+    
+    <!-- Resource hints -->
+    <link rel="modulepreload" href="/src/main.jsx" />
+    
+    <!-- Prevent mobile Safari from auto-zooming -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     
     <title>Joshua Ndegwa | Portfolio</title>
   </head>

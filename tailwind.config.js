@@ -21,4 +21,14 @@ export default {
     },
   },
   plugins: [],
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
+  variants: {
+    extend: {
+      opacity: ['group-hover'],
+      transform: ['group-hover'],
+      scale: ['group-hover'],
+    }
+  }
 }
