@@ -89,19 +89,7 @@ const projects = [
       '/projects/wellness2/5.jpg'
     ]
   },
-  {
-    id: 5,
-    title: "Wellness Balance: My Frontend Journey Begins",
-    description: "Built with HTML, JavaScript, and Tailwind CSS, this was my first step into web development. A simpler version focused on basic workout planning and tracking, it represents where my passion for frontend development began.",
-    subtitle: "First project that ignited my passion for web development",
-    images: [
-      '/projects/wellness1/1.jpg',
-      '/projects/wellness1/2.jpg',
-      '/projects/wellness1/3.jpg',
-      '/projects/wellness1/4.jpg',
-      '/projects/wellness1/5.jpg'
-    ]
-  }
+  
 ];
 
 const Projects = memo(() => {
